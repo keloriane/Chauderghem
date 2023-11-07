@@ -9,6 +9,15 @@
   @apply my-6;
 }
 
+.content figure {
+  display: flex;
+  justify-content: center;
+}
+.content img {
+  margin: auto;
+  width: 100%;
+}
+
 .content a {
   @apply underline;
 }

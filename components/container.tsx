@@ -1,3 +1,15 @@
-export default function Container({ children }) {
-  return <div className="container mx-auto px-5">{children}</div>
-}
+import React from 'react';
+import classnames from 'classnames';
+
+type ColProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const styles = classnames('grid', 'w-full', 'grid-cols-container');
+
+const Container = ({ children, className }: ColProps) => {
+  return <div className={classnames(styles, className)}>{children}</div>;
+};
+
+export default Container;

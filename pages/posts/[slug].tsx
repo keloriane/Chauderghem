@@ -13,18 +13,25 @@ import PostTitle from '../../components/post-title'
 import Tags from '../../components/tags'
 import { getAllPostsWithSlug, getPostAndMorePosts } from '../../lib/api'
 import { CMS_NAME } from '../../lib/constants'
+import Col from "../../components/common/Col/col";
+import {useEffect} from "react";
+
 
 export default function Post({ post, posts, preview }) {
   const router = useRouter()
   const morePosts = posts?.edges
+
+  useEffect(() => {
+    console.log(post);
+  }, []);
 
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />
   }
 
   return (
-    <Layout preview={preview}>
-      <Container>
+    <Layout>
+
         <Header />
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
@@ -33,21 +40,26 @@ export default function Post({ post, posts, preview }) {
             <article>
               <Head>
                 <title>
-                  {`${post.title} | Next.js Blog Example with ${CMS_NAME}`}
+                  {post.title}
                 </title>
                 <meta
                   property="og:image"
                   content={post.featuredImage?.node.sourceUrl}
                 />
               </Head>
-              <PostHeader
-                title={post.title}
-                coverImage={post.featuredImage}
-                date={post.date}
-                author={post.author}
-                categories={post.categories}
-              />
-              <PostBody content={post.content} />
+              <Container>
+                <Col colStart={4} colEnd={22}>
+                  <PostHeader
+                    title={post.title}
+                    coverImage={post.featuredImage}
+                    date={post.date}
+                    author={post.author}
+                    categories={post.categories}
+                  />
+                    <PostBody content={post.content} />
+
+                </Col>
+              </Container>
               <footer>
                 {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
               </footer>
@@ -57,7 +69,6 @@ export default function Post({ post, posts, preview }) {
             {morePosts.length > 0 && <MoreStories posts={morePosts} />}
           </>
         )}
-      </Container>
     </Layout>
   )
 }

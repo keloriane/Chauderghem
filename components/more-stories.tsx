@@ -1,14 +1,38 @@
 import PostPreview from './post-preview'
+import Container from "./container";
+import Col from "./common/Col/col";
 
 export default function MoreStories({ posts }) {
+    const renderAlphabetButtons = () => {
+        const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        return alphabets.map(letter => (
+            <button className={"hover:font-semibold hover:text-wine text-[33px] text-dark"} key={letter}>{letter}</button>
+        ));
+    };
   return (
     <section>
-      <h2 className="mb-8 text-6xl md:text-7xl font-bold tracking-tighter leading-tight">
-        More Stories
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 mb-32">
-        {posts.map(({ node }) => (
+        <Container>
+            <Col colStart={2} colEnd={15}>
+                <h2 className="text-[66px] text-dark">
+                    Auderhem par quartiers
+                </h2>
+                <p className={"text-[21px] font-semibold"}>
+                    Vous vous demandez peut-être qui est le personnage dont le nom est inscrit sur la plaque émaillée de votre rue ou quelle est l’origine de votre quartier ? Quels commerces ou industries y étaient florissants ? Quelles personnalités y vécurent ? Vous aimeriez savoir comment se divertissaient vos prédécesseurs, comment vivaient vos voisins d’antan ?
+                </p>
+            </Col>
+
+            <Col colStart={2} colEnd={24}>
+                <div className="flex justify-evenly mt-[100px] mb-[100px]">
+                    {renderAlphabetButtons()}
+                </div>
+            </Col>
+
+        </Container>
+
+      <Container>
+        {posts.map(({ node } , i:number) => (
           <PostPreview
+            index={i}
             key={node.slug}
             title={node.title}
             coverImage={node.featuredImage}
@@ -18,7 +42,8 @@ export default function MoreStories({ posts }) {
             excerpt={node.excerpt}
           />
         ))}
-      </div>
+      </Container>
     </section>
   )
 }
+
