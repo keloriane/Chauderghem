@@ -66,7 +66,6 @@ export default function Post({ post, posts, preview }) {
             </article>
 
             <SectionSeparator />
-            {morePosts.length > 0 && <MoreStories posts={morePosts} />}
           </>
         )}
     </Layout>
