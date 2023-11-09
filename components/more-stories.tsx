@@ -7,7 +7,8 @@ import {useEffect} from "react";
 
 
 
-export default function MoreStories({ posts , tags }) {
+
+export default function MoreStories({ posts }) {
 
 
   return (

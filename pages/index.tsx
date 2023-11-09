@@ -126,7 +126,7 @@ export default function Index( {allTags:{nodes} , allPosts:{edges},  preview }) 
         </Container>
 
 
-            {allPosts && allPosts.length > 0 && <MoreStories key={tags} posts={allPosts} tags={tags} />}
+            {allPosts && allPosts.length > 0 && <MoreStories key={tags} posts={allPosts} />}
 
     </Layout>
   )
