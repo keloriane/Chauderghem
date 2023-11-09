@@ -1,32 +1,68 @@
+
 import Head from 'next/head'
-import { GetStaticProps } from 'next'
+import Image from "next/image";
+import {GetStaticProps} from 'next'
 import Container from '../components/container'
 import MoreStories from '../components/more-stories'
-import HeroPost from '../components/hero-post'
-import Intro from '../components/intro'
 import Layout from '../components/layout'
-import { getAllPostsForHome } from '../lib/api'
-import { CMS_NAME } from '../lib/constants'
-import {useEffect} from "react";
+import {getAllPostsForHome, getAllTags} from '../lib/api'
+import {CMS_NAME} from '../lib/constants'
+import {useEffect, useState} from "react";
 import Col from "../components/common/Col/col";
 import AnimatedText from "../components/common/AnimatedText";
 import Hero from "../components/sections/hero";
 import imageHero from "./../public/images/chaussee-de-wavre.png"
 import postalCard from "./../public/images/chasse-royal.png"
 import Book from "../components/sections/book";
-import Image from "next/image";
+import {postByLetter} from "../graphql/query";
+import {enGB} from "date-fns/locale";
 
-export default function Index({ allPosts: { edges }, preview }) {
-  const heroPost = edges[0]?.node
-  const morePosts = edges
+type Tag = {
+    name:string,
+    id:string
+}
+
+export default function Index( {allTags:{nodes} , allPosts:{edges},  preview }) {
+
+    const [allPosts , setAllPosts] = useState(edges)
+
+    useEffect(() => {
+        console.log(edges)
+        setAllPosts(edges); // Set initial posts when component mounts
+    }, [edges]); // Run when edges change
+
+    const fetchData = async (tag: string) => {
+        const res = await fetch(`https://playground.pxl-studio.com/graphql`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: postByLetter,
+                variables: {
+                    tag: tag,
+                },
+            }),
+        });
+
+        const data = await res.json();
+
+        setAllPosts(data.data?.posts?.edges);
+
+        console.log()
+    };
+
+
+
+    const tags = nodes;
+
+    const tag =  tags.map((tag:Tag) =>tag.name)
 
     const handleLetterClick = (clickedLetter:string) => {
         console.log("Clicked letter:", clickedLetter);
         // Here, you can make your WPGraphQL call using clickedLetter or perform any other actions.
     };
-    useEffect(() => {
-        console.log(edges[0]?.node);
-    }, []);
+
 
   return (
     <Layout>
@@ -68,19 +104,39 @@ export default function Index({ allPosts: { edges }, preview }) {
             </Col>
         </Container>
 
+        <Container>
+            <Col colStart={2} colEnd={15}>
+                <h2 className="text-[66px] text-dark">
+                    Auderhem par quartiers
+                </h2>
+                <p className={"text-[21px] font-semibold"}>
+                    Vous vous demandez peut-être qui est le personnage dont le nom est inscrit sur la plaque émaillée de votre rue ou quelle est l’origine de votre quartier ? Quels commerces ou industries y étaient florissants ? Quelles personnalités y vécurent ? Vous aimeriez savoir comment se divertissaient vos prédécesseurs, comment vivaient vos voisins d’antan ?
+                </p>
+            </Col>
+
+            <Col colStart={2} colEnd={24}>
+                <div className="flex justify-evenly mt-[100px] mb-[100px]">
+                    {tags.map((tag: any) => (
+                        <button key={tag.id} onClick={() => fetchData(tag.name)} className={"hover:font-semibold hover:text-wine text-[33px] text-dark"}>
+                            {tag.name}</button>
+                    ))}
+                </div>
+            </Col>
+
+        </Container>
 
 
-            {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+            {allPosts && allPosts.length > 0 && <MoreStories key={tags} posts={allPosts} tags={tags} />}
 
     </Layout>
   )
 }
 
-export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
-  const allPosts = await getAllPostsForHome(preview)
-
+export const getStaticProps: GetStaticProps = async ({ preview = false } , tag='A') => {
+    const allPosts = await  getAllPostsForHome(preview , tag)
+  const allTags = await getAllTags()
   return {
-    props: { allPosts, preview },
+    props: { allPosts, allTags, preview },
     revalidate: 10,
   }
 }

@@ -59,11 +59,26 @@ export async function getAllPostsWithSlug() {
   return data?.posts
 }
 
-export async function getAllPostsForHome(preview) {
+
+export async function getAllTags() {
+  const data =  await fetchAPI(`
+    {
+  tags(first:36) {
+    nodes {
+      name
+      id
+    }
+  }
+}
+  `);
+
+  return data?.tags;
+}
+export async function getAllPostsForHome(preview:boolean , tag:string) {
   const data = await fetchAPI(
     `
-    query AllPosts {
-      posts(first: 20, where: {tag: "A",  orderby: { field: DATE, order: DESC } }) {
+    query AllPosts($tag:String) {
+      posts(first: 20, where: {tag: $tag,  orderby: { field: DATE, order: DESC } }) {
         edges {
           node {
             title
@@ -92,6 +107,7 @@ export async function getAllPostsForHome(preview) {
   `,
     {
       variables: {
+        tag:tag,
         onlyEnabled: !preview,
         preview,
       },
