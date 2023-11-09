@@ -1,6 +1,7 @@
 import React from "react";
 import Container from "../container";
 import Col from "../common/Col/col";
+import Link from "next/link";
 
 const Book = () => {
     return (
@@ -12,9 +13,12 @@ const Book = () => {
                         <p className={'text-[20px]'}>
                             Vous vous demandez peut-être qui est le personnage dont le nom est inscrit sur la plaque émaillée de votre rue ou quelle est l’origine de votre quartier ? Quels commerces ou industries y étaient florissants ? Quelles personnalités y vécurent ? Vous aimeriez savoir comment se divertissaient vos prédécesseurs, comment vivaient vos voisins d’antan ?
                         </p>
-                        <button className={"bg-red-700 text-white p-2 rounded-full "}>
+                        <div className={"flex justify-center w-[200px] bg-red-700 text-white py-[10px] px-[15px] rounded-full "}>
+                        <Link href={"#"} className={""}>
                             Commander le livre
-                        </button>
+                        </Link>
+
+                        </div>
                     </div>
                 </Col>
                 <Col colStart={16} colEnd={22}>

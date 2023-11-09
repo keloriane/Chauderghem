@@ -32,3 +32,21 @@ export const postByLetter =  `
           }
         }
       `
+
+export const homePosts = `{
+  posts(first: 6, where: {orderby: {field: DATE, order: DESC}}) {
+    edges {
+      node {
+        title
+        excerpt
+        slug
+        date
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+      }
+    }
+  }
+}`;

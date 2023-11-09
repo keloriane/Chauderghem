@@ -5,7 +5,7 @@ import {GetStaticProps} from 'next'
 import Container from '../components/container'
 import MoreStories from '../components/more-stories'
 import Layout from '../components/layout'
-import {getAllPostsForHome, getAllTags} from '../lib/api'
+import {getAllPostsForHome, getAllTags, getPostsSlider} from '../lib/api'
 import {CMS_NAME} from '../lib/constants'
 import {useEffect, useState} from "react";
 import Col from "../components/common/Col/col";
@@ -16,18 +16,24 @@ import postalCard from "./../public/images/chasse-royal.png"
 import Book from "../components/sections/book";
 import {postByLetter} from "../graphql/query";
 import {enGB} from "date-fns/locale";
+import LastPost from "../components/sections/last-posts";
+import LastPosts from "../components/sections/last-posts";
+import {json} from "stream/consumers";
 
 type Tag = {
     name:string,
     id:string
 }
 
-export default function Index( {allTags:{nodes} , allPosts:{edges},  preview }) {
+export default function Index( {allTags:{nodes} , allPosts:{edges}, homePosts, preview }) {
 
     const [allPosts , setAllPosts] = useState(edges)
+    const [sliderPosts , setSliderPosts] = useState(homePosts)
+
+
+
 
     useEffect(() => {
-        console.log(edges)
         setAllPosts(edges); // Set initial posts when component mounts
     }, [edges]); // Run when edges change
 
@@ -104,6 +110,12 @@ export default function Index( {allTags:{nodes} , allPosts:{edges},  preview }) 
             </Col>
         </Container>
 
+        <section className={"flex justify-end mt-[200px] mb-[200px]"}>
+            <div className={"w-[75%]"}>
+                <LastPosts posts={sliderPosts}  />
+            </div>
+        </section>
+
         <Container>
             <Col colStart={2} colEnd={15}>
                 <h2 className="text-[66px] text-dark">
@@ -133,10 +145,10 @@ export default function Index( {allTags:{nodes} , allPosts:{edges},  preview }) 
 }
 
 export const getStaticProps: GetStaticProps = async ({ preview = false } , tag='A') => {
-    const allPosts = await  getAllPostsForHome(preview , tag)
-  const allTags = await getAllTags()
+    const allPosts = await  getAllPostsForHome(preview , tag);
+    const homePosts = await getPostsSlider(preview);
+    const allTags = await getAllTags()
   return {
-    props: { allPosts, allTags, preview },
-    revalidate: 10,
+    props: { allPosts, allTags, homePosts, preview },
   }
 }

@@ -1,3 +1,5 @@
+import {homePosts} from "../graphql/query";
+
 const API_URL = process.env.WORDPRESS_API_URL
 
 async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
@@ -73,6 +75,29 @@ export async function getAllTags() {
   `);
 
   return data?.tags;
+}
+
+export async function getPostsSlider(preview:boolean) {
+  const data = await fetchAPI(`{
+  posts(first: 6, where: {orderby: {field: DATE, order: DESC}}) {
+    edges {
+      node {
+        title
+        excerpt
+        slug
+        date
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+      }
+    }
+  }
+}`,{
+      preview
+  } );
+  return data?.posts
 }
 export async function getAllPostsForHome(preview:boolean , tag:string) {
   const data = await fetchAPI(

@@ -60,9 +60,6 @@ export default function Post({ post, posts, preview }) {
 
                 </Col>
               </Container>
-              <footer>
-                {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
-              </footer>
             </article>
 
             <SectionSeparator />
