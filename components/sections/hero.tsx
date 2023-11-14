@@ -5,6 +5,7 @@ import Image, {StaticImageData} from "next/image";
 import AnimatedText from "../common/AnimatedText";
 
 
+
 type Hero = {
     imageHero: StaticImageData;
 }
@@ -15,7 +16,7 @@ export default function Hero({imageHero}) {
                 <Col colStart={4} colEnd={23}>
                     <div className={"flex items-center flex-col justify-center  w-full m-auto"}>
                         <AnimatedText as={"h2"} text={"Auderghem à travers les ages et par quartier"} gap={"5px"} duration={.5} splitBy={"word"} className={"text-center"}/>
-                        <AnimatedText as={"h1"} text={"  Cercle d’histoire d’Auderghem"} gap={"15px"} duration={.5} splitBy={"word"} className={"text-[88px] uppercase text-center justify-center"}/>
+                        <AnimatedText as={"h1"} text={"  Cercle d’histoire d’Auderghem"} gap={"15px"} duration={.5} splitBy={"word"} className={"sm:text-[40px] md:[40px] xl:text-[88px] uppercase text-center justify-center"}/>
                     </div>
                 </Col>
             </Container>

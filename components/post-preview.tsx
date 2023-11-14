@@ -35,8 +35,8 @@ export default function PostPreview({
   };
 
   return (
-        <Col colStart={index % 2 === 0 ? 3 : 14} colEnd={index % 2 === 0 ? 13 : 26}>
-          <div className={"pt-[30px] pb-[30px]"}>
+        <Col colStart={2} colEnd={26}>
+          <div className={"pt-[30px] pb-[30px] border border-b-wine border-t-wine"}>
             <div onClick={toggleAccordion} className={"text-wine text-3xl flex justify-between"}>
               {title}
               <Link href={`/posts/${slug}`}>

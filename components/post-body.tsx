@@ -6,9 +6,7 @@ import {useEffect} from "react";
 
 export default function PostBody({ content }) {
 
-    useEffect(() => {
-        console.log(content)
-    }, []);
+
 
     return (
     <div className="mx-auto">
